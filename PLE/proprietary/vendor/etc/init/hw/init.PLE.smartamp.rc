@@ -1,0 +1,24 @@
+service amp-enable-sh /vendor/bin/init.ple.smartamp_enable.sh
+	disabled
+	class core
+	user media
+	oneshot
+
+service amp-default-sh /vendor/bin/init.ple.smartamp_default.sh
+	class core
+	user root
+	oneshot
+
+on init
+	chown media audio /dev/i2c-6
+	chmod 660 /dev/i2c-6
+	setprop audio.smartamp.init false
+
+on property:persist.smartamp.enable=0
+	start amp-enable-sh
+
+on property:persist.smartamp.enable=1
+	start amp-enable-sh
+
+on property:persist.smartamp.enable=2
+	start amp-enable-sh

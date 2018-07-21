@@ -1,0 +1,46 @@
+# AlanHZ, import project diff rc
+import /vendor/etc/init/hw/init.${ro.boot.device}.target.rc
+# init BT/wifi related rc into rootdir (CPLai,fihtdc@20150309)
+import /vendor/etc/init/hw/init.qcom.misc.rc
+#ChihFu add for FIH SSR mechanism
+import /vendor/etc/init/hw/init.qcom.ramdump.rc
+# IdaChiang add for Power off charging
+import /vendor/etc/init/hw/init.qcom.poweroff_charging.rc
+#jason add for D1C LED
+import /vendor/etc/init/hw/init.led.rc
+#Fih add for securefs
+import /vendor/etc/init/hw/init.qcom.fs.rc
+# fihtdc, danielyjhsieh, 20141205, add for FQC audio loopback
+import /vendor/etc/init/hw/init.${ro.boot.device}.fqc.rc
+# Chuck add for NFC 
+import /vendor/etc/init/hw/init.nfc.rc
+
+#Debbie, add battery permission
+import /vendor/etc/init/hw/init.qcom.battery.rc
+
+#jason add for D1C LED
+import /vendor/etc/init/hw/init.key.rc
+
+on early-init
+        setprop ro.bsp.device ${ro.boot.device}
+
+on property:vold.decrypt=trigger_reset_main
+    stop audio-hal-2-0
+    stop camera-provider-2-4
+
+on property:vold.decrypt=trigger_restart_framework
+    start audio-hal-2-0
+    start camera-provider-2-4
+
+#Alan, Add for imei backup
+on property:init.svc.ril-daemon=running
+	write /proc/AllHWList/imei ${persist.radio.imei}
+
+on property:init.svc.ril-daemon2=running
+  write /proc/AllHWList/imei2 ${persist.radio.imei2}
+
+on property:sys.gxfp.version=*
+	setprop sys.fp.firmware.version  Goodix-${sys.gxfp.version}
+
+on property:ro.product.nickname=*
+	setprop persist.sys.exif.model ${ro.product.nickname}

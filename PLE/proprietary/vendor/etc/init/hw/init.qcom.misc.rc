@@ -1,0 +1,45 @@
+on boot
+	chown system system /sys/class/rtc/rtc0/device/clear_alarm
+	setprop persist.sys.wbg.bt.service false
+	setprop persist.sys.wbg.bt btstop
+
+on post-fs-data
+# KennyChu Add for wapi certificate +++
+mkdir /data/certificate 0777 system system
+copy /system/etc/wifi/cert_chmod.sh /data/misc/cert_chmod.sh
+chmod 0755 /data/misc/cert_chmod.sh
+# KennyChu Add for wapi certificate ---
+
+on post-fs-data
+	restorecon_recursive /data/misc/wifi/sockets
+
+#Fihtdccode@GaryTCShih  for different NV
+service wlan_nv /system/vendor/bin/sh /system/etc/wlan_nv.sh
+    class late_start
+    user root
+    oneshot
+#Fihtdccode@GaryTCShih  for different NV
+
+# CPLai add for WBGTestTool Wi-Fi test
+service wbgtesttool_wifi /system/vendor/bin/sh /system/etc/wbgtesttool_wifitest.sh
+    user root
+    oneshot
+    disabled
+
+on property:persist.sys.wbg.wifi=start
+    start wbgtesttool_wifi
+
+on property:sys.boot_completed=1
+    restorecon_recursive /sys/devices/virtual/timed_output/vibrator/level
+
+
+# TommyYSHung add for WBGTestTool BT test
+service btstart_sh /system/vendor/bin/sh /system/etc/btTest.sh
+	user root
+	oneshot
+	disabled
+
+# TommyYSHung add for WBGTestTool BT test
+#on property:persist.sys.wbg.bt=btstart
+on property:persist.sys.wbg.bt.service=true
+	start btstart_sh

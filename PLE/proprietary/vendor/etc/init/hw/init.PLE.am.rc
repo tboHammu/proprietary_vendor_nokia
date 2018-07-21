@@ -1,0 +1,2 @@
+on init
+	setprop ro.sys.fw.bg_apps_limit 32 

@@ -1,0 +1,24 @@
+on boot
+	chown system system /proc/AllHWList/LCM0
+	chown system system /proc/AllHWList/LCM0/color_mode
+	chown system system /proc/AllHWList/LCM0/color_temperature
+	chown media media /proc/AllHWList/LCM0/CABC_settings
+	chmod 777 /proc/AllHWList/LCM0
+	chmod 664 /proc/AllHWList/LCM0/color_mode
+	chmod 664 /proc/AllHWList/LCM0/color_temperature
+	chmod 664 /proc/AllHWList/LCM0/CABC_settings
+
+	chown system system /proc/AllHWList/LCM0/awer_cnt
+	chown system system /proc/AllHWList/LCM0/awer_status
+	chmod 664 /proc/AllHWList/LCM0/awer_cnt
+	chmod 664 /proc/AllHWList/LCM0/awer_status
+
+
+on property:persist.sys.svi=*
+    start svistatusch
+
+service svistatusch /system/bin/sh /system/bin/svi_change_status.sh
+    disabled
+    user system
+    oneshot
+

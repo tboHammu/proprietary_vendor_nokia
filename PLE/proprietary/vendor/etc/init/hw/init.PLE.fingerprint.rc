@@ -1,0 +1,11 @@
+import /vendor/etc/init/hw/init.PLE.fingerprint.${ro.boot.fp}.rc
+
+on init
+	setprop persist.fp.navigation 1
+
+on post-fs-data
+	mkdir /data/system/fingerprint 0770 system system
+
+#service fingerprintd /system/bin/fingerprintd
+#    class late_start
+#    user system

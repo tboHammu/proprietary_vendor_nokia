@@ -1,0 +1,7 @@
+on boot
+    chown system system /sys/class/power_supply/battery/charging_enabled
+    chmod 0664 /sys/class/power_supply/battery/charging_enabled
+    restorecon /sys/class/power_supply/battery/charging_enabled
+    
+    chown system system /sys/class/power_supply/usb/device/fih_otg_fun
+    chmod 0664 /sys/class/power_supply/usb/device/fih_otg_fun

@@ -1,0 +1,8 @@
+on boot
+    chown system system /dev/elan_fp
+    chmod 0644 /dev/elan_fp
+    chown system system /dev/elan_tb
+    chmod 0644 /dev/elan_tb
+
+on property:sys.fih.fingerprint=false
+    setprop sys.fih.fingerprint true

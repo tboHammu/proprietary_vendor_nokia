@@ -1,0 +1,52 @@
+# Win add for Fingerprint
+import /vendor/etc/init/hw/init.PLE.fingerprint.rc
+# Win add for Touchpanel
+import /vendor/etc/init/hw/init.PLE.tp.rc
+# smartamp, danielyjhsieh, 20151012
+import /vendor/etc/init/hw/init.PLE.smartamp.rc
+# SW4-HL-Display-ImplementCECTCABC-00+_20160126
+import /vendor/etc/init/hw/init.PLE.lcm.rc
+# Win add for ALT
+import /vendor/etc/init/hw/init.PLE.alt.rc
+# fihtdc, danielyjhsieh, 20141205, add for FQC audio loopback
+import /vendor/etc/init/hw/init.PLE.fqc.rc
+#FihTdcCode@20170314 AlanChiu add for D1C
+import /vendor/etc/init/hw/init.PLE.am.rc
+#FihTdcCode@20161212 JohnsonJWHuang add for One image D1C-4955
+import /vendor/etc/init/hw/init.PLE.led.rc
+# Disable offload for dolby
+on early-boot
+        setprop audio.offload.disable 1
+
+on fs
+    write /proc/sys/vm/swappiness 60
+    
+#FIH ZZDC add@20170118 zhangyao for wbg test start 
+on boot
+    setprop persist.sys.wbg.bt.service false
+service wbgtesttool_wifi /system/bin/sh /system/etc/wbgtesttool_wifitest.sh
+    user root
+    oneshot
+    disabled
+
+on property:persist.sys.wbg.wifi=start
+    start wbgtesttool_wifi
+
+service rm_socket /system/bin/sh /system/etc/wifi_rm_socket.sh
+   user root
+   group root
+   oneshot
+   disabled
+
+on property:wifi.rm.socket=true
+   start rm_socket
+
+service btstart_sh /system/bin/sh /system/etc/btTest.sh
+        user root
+        oneshot
+        disabled
+
+on property:persist.sys.wbg.bt.service=true
+        start btstart_sh
+
+#FIH ZZDC add@20170118 zhangyao for wbg test end 

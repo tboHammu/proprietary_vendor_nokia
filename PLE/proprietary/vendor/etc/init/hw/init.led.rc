@@ -1,0 +1,18 @@
+# jason add for led virtual file
+on boot
+    chown system system /sys/class/leds/led:gpio1/blink
+    chown system system /sys/class/leds/led:gpio1/pwm_duty
+    chown system system /sys/class/leds/led:gpio1/pwm_powerOffChar_duty
+
+    chown system system /sys/devices/soc/soc:leds/leds/green/brightness
+    chown system system /sys/devices/soc/soc:leds/leds/red/brightness
+    chown system system /sys/devices/soc/soc:leds/leds/blue/brightness
+
+    chown system system /sys/class/leds/led-r/brightness
+    chown system system /sys/class/leds/led-g/brightness
+    chown system system /sys/class/leds/led-b/brightness
+
+    chown system system /sys/class/leds/led-r/blink
+    chown system system /sys/class/leds/led-g/blink
+    chown system system /sys/class/leds/led-b/blink
+

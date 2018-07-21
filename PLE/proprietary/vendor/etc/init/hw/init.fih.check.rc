@@ -1,0 +1,22 @@
+on boot
+    chmod 664 /sys/class/devfreq/soc:qcom,cpubw/governor
+    chown root system /sys/class/devfreq/soc:qcom,cpubw/governor
+
+on property:sys.dev.ram_burst=on
+    write /sys/class/devfreq/soc:qcom,cpubw/governor performance 
+
+on property:sys.dev.ram_burst=off
+    write /sys/class/devfreq/soc:qcom,cpubw/governor bw_hwmon
+        
+on property:persist.sys.PreventPowerkey=on
+    write /sys/class/leds/button-backlight/brightness 25
+    
+on post-fs-data
+    start preload_app
+
+service preload_app /system/bin/sh /system/etc/removable-preload-app.sh
+    disabled
+    class core
+    user root
+    group root
+    oneshot

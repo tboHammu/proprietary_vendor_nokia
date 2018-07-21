@@ -1,0 +1,30 @@
+on fs
+#   /*+++FIH:StanleyCheng 2011/12/20+++*/
+# Mount virtual cd-rom.
+    mkdir /hidden 0777 system system
+    mount ext4 /dev/block/bootdevice/by-name/hidden /hidden noatime nosuid nodev barrier=1
+    chown system hidden /hidden
+    restorecon_recursive /hidden
+
+# Mount CDA image.
+    mkdir /hidden/data 0777 system system
+    mount ext4 /dev/block/bootdevice/by-name/cda /hidden/data noatime nosuid nodev barrier=1
+    chown system system /hidden/data
+    restorecon_recursive /hidden/data
+
+# Set /hidden /hidden/data directory permission
+    chmod 0551 /hidden
+    chmod 0551 /hidden/data
+    mkdir /hidden/data/CDALog 0755 system system
+    exec u:r:qti_init_shell:s0 -- /vendor/bin/init.qcom.pre-cda.sh
+
+on property:sys.boot_completed=1
+    losetup /dev/block/cdrom-loop /hidden/custom.iso
+    write /sys/devices/soc/78db000.usb/msm_hsusb/gadget/lun0/file /dev/block/cdrom-loop
+    restorecon_recursive /dev/block/cdrom-loop
+    mkdir /data/app/preload 0771 system system
+
+# /data/misc/cust
+    mkdir /data/misc/cust 0771 system system
+    chown system system /data/misc/cust
+    restorecon_recursive /data/misc/cust

@@ -1,0 +1,6 @@
+# SW8-Prod, DickCHYang, 20161107, add for FQC audio loopback
+import /vendor/etc/init/hw/init.VZ1.fqc.rc
+# SW8-DH add for VZ1 touch
+import /vendor/etc/init/hw/init.qcom.tp.rc
+# SW8 add for VZ1 Display
+import /vendor/etc/init/hw/init.VZ1.lcm.rc

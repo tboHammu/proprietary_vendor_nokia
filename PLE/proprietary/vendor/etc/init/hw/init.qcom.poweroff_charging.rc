@@ -1,0 +1,63 @@
+# when receieve charger tag, it needs to execute "power off charging" program
+on charger
+	write /sys/class/leds/lcd-backlight/brightness 1
+	write /sys/class/android_usb/android0/enable 0
+	write /sys/class/android_usb/android0/idVendor 2E04
+	write /sys/class/android_usb/android0/idProduct C004
+	write /sys/class/android_usb/android0/functions mass_storage
+	write /sys/class/android_usb/android0/enable 1
+
+# Force to enable QC2.0 functionality
+#	start hvdcp
+
+# This is could be used for debug by instead of above settings.
+#	write /sys/class/android_usb/android0/enable 0
+#	write /sys/class/android_usb/android0/idVendor 0489
+#	write /sys/class/android_usb/android0/idProduct C026
+#	write /sys/class/android_usb/android0/functions mtp,mass_storage,adb
+#	write /sys/class/android_usb/android0/enable 1
+#	start adbd
+
+# power consumption
+#	write /sys/module/msm_pm/modes/cpu0/power_collapse/idle_enabled 1
+#	write /sys/module/msm_pm/modes/cpu0/power_collapse/suspend_enabled 1
+#	write /sys/module/msm_pm/modes/cpu0/standalone_power_collapse/idle_enabled 1
+#	write /sys/module/msm_pm/modes/cpu0/standalone_power_collapse/suspend_enabled 1
+#	write /sys/module/msm_pm/modes/cpu1/standalone_power_collapse/idle_enabled 1
+#	wrtie /sys/module/msm_pm/modes/cpu1/standalone_power_collapse/suspend_enabled 1
+#	write /sys/module/lpm_levels/enable_low_power/l2 4
+	write /sys/devices/system/cpu/cpu1/online 0
+	write /sys/devices/system/cpu/cpu2/online 0
+	write /sys/devices/system/cpu/cpu3/online 0
+	write /sys/devices/system/cpu/cpu4/online 0
+	write /sys/devices/system/cpu/cpu5/online 0
+	write /sys/devices/system/cpu/cpu6/online 0
+	write /sys/devices/system/cpu/cpu7/online 0
+	
+	write /sys/devices/virtual/input/touch/suspend 1
+	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor powersave
+	write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor powersave
+	write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor powersave
+	write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor powersave
+	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor powersave
+	write /sys/devices/system/cpu/cpu5/cpufreq/scaling_governor powersave
+	write /sys/devices/system/cpu/cpu6/cpufreq/scaling_governor powersave
+	write /sys/devices/system/cpu/cpu7/cpufreq/scaling_governor powersave
+
+#start program
+	write /sys/class/power_supply/battery/device/input_change 1
+	write /sys/power/wake_lock power_off_charging
+	write /proc/sys/kernel/printk 8
+	exec /system/bin/battery_charger
+
+#service fih_charger /sbin/battery_charger
+#    class charger
+
+#	write /sys/power/wake_unlock power_off_charging
+#	write /sys/class/power_supply/battery/device/input_change 0
+
+#	write /sys/devices/virtual/input/touch/suspend 0
+#	write /sys/class/leds/lcd-backlight/brightness 255
+#	write /sys/class/leds/red/brightness 0
+#	write /sys/class/leds/green/brightness 0
+#	write /sys/class/leds/amber/brightness 0
